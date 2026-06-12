@@ -8,7 +8,7 @@ export function Footer() {
   return (
     <footer id="contact" className="border-t border-border bg-background">
       <div className="mx-auto max-w-[110rem] px-5 py-20 sm:px-8 sm:py-28">
-        <SectionHeading index="06" label="Contact" />
+        <SectionHeading index="07" label="Contact" />
         <div className="mt-8 grid gap-12 lg:grid-cols-[1.4fr_1fr]">
           <div>
             <RevealText
