@@ -1,16 +1,13 @@
 import { AnimatedCard, type WorkItem } from "@/components/ui/AnimatedCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { RevealText } from "@/components/ui/RevealText";
-import work01 from "@/assets/work-01.jpg";
-import work02 from "@/assets/work-02.jpg";
-import work03 from "@/assets/work-03.jpg";
-import work04 from "@/assets/work-04.jpg";
+import { workImages } from "@/lib/images";
 
 const WORK: WorkItem[] = [
-  { title: "Lumen", category: "Brand · Web · Motion", year: "2025", image: work02 },
-  { title: "Atelier Maré", category: "Art Direction", year: "2025", image: work03 },
-  { title: "Form & Field", category: "Identity · Web", year: "2024", image: work01 },
-  { title: "Nacre", category: "Product · 3D", year: "2024", image: work04 },
+  { title: "Lumen", category: "Brand · Web · Motion", year: "2025", image: workImages.lumen },
+  { title: "Atelier Maré", category: "Art Direction", year: "2025", image: workImages.atelierMare },
+  { title: "Form & Field", category: "Identity · Web", year: "2024", image: workImages.formField },
+  { title: "Nacre", category: "Product · 3D", year: "2024", image: workImages.nacre },
 ];
 
 export function ShowcaseSection() {
