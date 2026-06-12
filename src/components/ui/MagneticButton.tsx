@@ -47,7 +47,7 @@ export function MagneticButton({
     y.set(0);
   };
 
-  const Comp = motion[as] as typeof motion.div;
+  const Comp = motion[as] as React.ElementType;
 
   return (
     <motion.div
@@ -58,7 +58,7 @@ export function MagneticButton({
       className="inline-flex"
     >
       <Comp
-        href={href}
+        {...(href ? { href } : {})}
         onClick={onClick}
         aria-label={ariaLabel}
         className={cn("inline-flex items-center justify-center", className)}
