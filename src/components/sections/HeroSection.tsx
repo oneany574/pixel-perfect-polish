@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 import { ease, fadeUp, riseIn, staggerContainer } from "@/lib/animations";
-import heroImg from "@/assets/work-01.jpg";
+import { heroImage } from "@/lib/images";
 
 const TITLE_LINES = ["Design that", "moves"];
 
@@ -96,7 +96,7 @@ export function HeroSection() {
         className="pointer-events-none absolute -right-10 top-1/2 z-0 hidden h-[70vh] w-[34vw] -translate-y-1/2 overflow-hidden rounded-3xl md:block"
       >
         <motion.img
-          src={heroImg}
+          src={heroImage}
           alt="Abstract sculptural studio artwork"
           width={1200}
           height={1500}
