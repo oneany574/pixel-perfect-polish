@@ -1,10 +1,16 @@
 import { RevealText } from "@/components/ui/RevealText";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { useSection, useContent } from "@/lib/cms/context";
+import { safeHref } from "@/lib/cms/content";
 
-const SOCIALS = ["Instagram", "Behance", "LinkedIn", "Awwwards"];
+
 
 export function Footer() {
+  const site = useContent().settings;
+  const social = useSection("socials");
+  const SOCIALS = social.enabled ? social.items : [];
+  const email = site["email"] ?? "";
   return (
     <footer id="contact" className="border-t border-border bg-background">
       <div className="mx-auto max-w-[110rem] px-5 py-20 sm:px-8 sm:py-28">
@@ -13,13 +19,13 @@ export function Footer() {
           <div>
             <RevealText
               as="h2"
-              text="Let's build something worth remembering."
+              text={site["contactTitle"] ?? ""}
               serifWords={[4, 5]}
               className="display-xl max-w-3xl"
             />
             <div className="mt-10">
-              <AnimatedButton href="mailto:hello@studionova.com">
-                hello@studionova.com
+              <AnimatedButton href={`mailto:${email}`}>
+                {email}
               </AnimatedButton>
             </div>
           </div>
@@ -28,21 +34,19 @@ export function Footer() {
             <div>
               <p className="eyebrow text-muted-foreground">Studio</p>
               <p className="mt-3 leading-relaxed text-foreground/80">
-                14 Rue des Arts
-                <br />
-                75003 Paris, FR
+                <span className="whitespace-pre-line">{site["address"]}</span>
               </p>
             </div>
             <div>
               <p className="eyebrow text-muted-foreground">Social</p>
               <ul className="mt-3 space-y-2">
-                {SOCIALS.map((s) => (
-                  <li key={s}>
+                {SOCIALS.map((s, i) => (
+                  <li key={(s["label"] ?? "") + i}>
                     <a
-                      href="#"
+                      href={safeHref(s["href"] ?? "#")}
                       className="link-underline text-foreground/80 transition-colors hover:text-foreground"
                     >
-                      {s}
+                      {s["label"]}
                     </a>
                   </li>
                 ))}
@@ -52,8 +56,8 @@ export function Footer() {
         </div>
 
         <div className="mt-20 flex flex-col items-start justify-between gap-4 border-t border-border pt-8 text-xs text-muted-foreground sm:flex-row sm:items-center">
-          <p>© {new Date().getFullYear()} Studio Nova. All rights reserved.</p>
-          <p>Crafted with intent — inspired by editorial design.</p>
+          <p>© {new Date().getFullYear()} {site["name"]}. All rights reserved.</p>
+          <p>{site["footer"]}</p>
         </div>
       </div>
     </footer>

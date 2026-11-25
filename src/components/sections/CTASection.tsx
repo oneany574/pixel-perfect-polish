@@ -1,17 +1,11 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
-
-const MARQUEE = [
-  "Available for new projects",
-  "Brand",
-  "Web",
-  "Motion",
-  "Product",
-  "Let's collaborate",
-];
+import { useSection } from "@/lib/cms/context";
 
 export function CTASection() {
+  const content = useSection("cta");
+  const MARQUEE = content.items.map((i) => i["text"] ?? "");
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -39,12 +33,12 @@ export function CTASection() {
       <div className="mx-auto mt-20 max-w-[110rem] px-5 sm:px-8">
         <div className="flex flex-col items-start justify-between gap-10 lg:flex-row lg:items-end">
           <h2 className="font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-6xl">
-            Have a project in mind?
+            {content.title}
             <br />
-            <span className="font-serif italic text-clay">Let's make it.</span>
+            <span className="font-serif italic text-clay">{content.fields["accent"]}</span>
           </h2>
           <AnimatedButton href="#contact" variant="outline" className="border-primary-foreground/30 text-primary-foreground">
-            Start a project
+            {content.fields["button"]}
           </AnimatedButton>
         </div>
       </div>

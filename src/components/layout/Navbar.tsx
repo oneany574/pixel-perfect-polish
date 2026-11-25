@@ -4,15 +4,14 @@ import { Menu, X } from "lucide-react";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { ease } from "@/lib/animations";
 import { cn } from "@/lib/utils";
+import { useSection, useContent } from "@/lib/cms/context";
+import { safeHref } from "@/lib/cms/content";
 
-const NAV_LINKS = [
-  { label: "Work", href: "#work" },
-  { label: "Studio", href: "#studio" },
-  { label: "Process", href: "#process" },
-  { label: "Recognition", href: "#recognition" },
-];
 
 export function Navbar() {
+  const site = useContent().settings;
+  const nav = useSection("navigation");
+  const NAV_LINKS = nav.enabled ? nav.items.map((i) => ({ label: i["label"] ?? "", href: safeHref(i["href"] ?? "#") })) : [];
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -49,7 +48,7 @@ export function Navbar() {
             href="#top"
             className="font-display text-lg font-semibold tracking-tight"
           >
-            studio<span className="text-clay">.</span>nova
+            {site["brand"]}
           </a>
 
           <nav className="hidden items-center gap-9 md:flex">
@@ -65,7 +64,7 @@ export function Navbar() {
           </nav>
 
           <div className="hidden md:block">
-            <AnimatedButton href="#contact">Let's talk</AnimatedButton>
+            <AnimatedButton href="#contact">{site["navContact"]}</AnimatedButton>
           </div>
 
           <button
@@ -89,7 +88,7 @@ export function Navbar() {
           >
             <div className="flex items-center justify-between px-5 py-5">
               <span className="font-display text-lg font-semibold">
-                studio<span className="text-clay">.</span>nova
+                {site["brand"]}
               </span>
               <button
                 onClick={() => setOpen(false)}
@@ -132,7 +131,7 @@ export function Navbar() {
                   onClick={() => setOpen(false)}
                   className="inline-flex items-center gap-2 rounded-full bg-clay px-7 py-3.5 text-sm font-medium text-clay-foreground"
                 >
-                  Let's talk
+                  {site["navContact"]}
                 </a>
               </motion.div>
             </motion.nav>

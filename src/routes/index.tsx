@@ -10,44 +10,46 @@ import { ShowcaseSection } from "@/components/sections/ShowcaseSection";
 import { ProcessSection } from "@/components/sections/ProcessSection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { CTASection } from "@/components/sections/CTASection";
+import { ContentContext } from "@/lib/cms/context";
+import { getPublishedContent } from "@/lib/cms/cms.functions";
+import { section } from "@/lib/cms/content";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Studio Nova — Brand, Web & Motion Design Studio" },
-      {
-        name: "description",
-        content:
-          "Studio Nova is an independent creative studio crafting award-winning brands, websites and digital products with an obsession for motion and detail.",
-      },
-      { property: "og:title", content: "Studio Nova — Creative Design Studio" },
-      {
-        property: "og:description",
-        content:
-          "Award-winning brand, web and motion design. Editorial design meets engineering precision.",
-      },
-      { property: "og:type", content: "website" },
-    ],
-  }),
+  loader: () => getPublishedContent(),
+  head: ({ loaderData }) => {
+    const title = loaderData?.settings.title ?? "Studio Nova — Creative Design Studio";
+    const description = loaderData?.settings.description ?? "Independent brand, web and motion design studio.";
+    const image = loaderData ? section(loaderData, "hero").fields.image : undefined;
+    return { meta: [
+      { title }, { name: "description", content: description },
+      { property: "og:title", content: title }, { property: "og:description", content: description },
+      { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
+      ...(image?.startsWith("https://") ? [{ property: "og:image", content: image }, { name: "twitter:image", content: image }] : []),
+    ] };
+  },
   component: Index,
 });
 
 function Index() {
   useLenis();
+  const content = Route.useLoaderData();
+  const on = (key: string) => section(content, key).enabled;
   return (
+    <ContentContext.Provider value={content}>
     <div className="relative bg-background">
       <ScrollControls />
       <Navbar />
       <main>
-        <HeroSection />
-        <IntroSection />
-        <FeaturesSection />
-        <ShowcaseSection />
-        <ProcessSection />
-        <TestimonialsSection />
-        <CTASection />
+        {on("hero") && <HeroSection />}
+        {on("studio") && <IntroSection />}
+        {on("capabilities") && <FeaturesSection />}
+        {on("work") && <ShowcaseSection />}
+        {on("process") && <ProcessSection />}
+        {on("recognition") && <TestimonialsSection />}
+        {on("cta") && <CTASection />}
       </main>
       <Footer />
     </div>
+    </ContentContext.Provider>
   );
 }

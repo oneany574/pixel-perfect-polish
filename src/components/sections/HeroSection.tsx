@@ -2,11 +2,12 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 import { ease, fadeUp, riseIn, staggerContainer } from "@/lib/animations";
-import { heroImage } from "@/lib/images";
-
-const TITLE_LINES = ["Design that", "moves"];
+import { useSection } from "@/lib/cms/context";
 
 export function HeroSection() {
+  const content = useSection("hero");
+  const f = content.fields;
+  const TITLE_LINES = [content.title, f["secondLine"] ?? ""];
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -25,7 +26,7 @@ export function HeroSection() {
     >
       {/* vertical side label, echoing the reference's "Honors" rail */}
       <span className="eyebrow pointer-events-none absolute right-6 top-1/2 hidden -translate-y-1/2 rotate-90 text-muted-foreground lg:block">
-        Creative Studio — Est. 2014
+        {f["sideLabel"]}
       </span>
 
       <motion.div style={{ y: textY, opacity: fade }} className="relative z-10">
@@ -36,11 +37,11 @@ export function HeroSection() {
           className="mb-6 flex items-center gap-4"
         >
           <motion.span variants={fadeUp} className="eyebrow text-clay">
-            01 — Portfolio
+            {content.label}
           </motion.span>
           <motion.span variants={fadeUp} className="h-px w-12 bg-border" />
           <motion.span variants={fadeUp} className="eyebrow text-muted-foreground">
-            Art Direction & Interaction
+            {f["subtitle"]}
           </motion.span>
         </motion.div>
 
@@ -51,11 +52,11 @@ export function HeroSection() {
           className="display-hero max-w-[14ch]"
         >
           {TITLE_LINES.map((line, i) => (
-            <span key={line} className="reveal-line">
+            <span key={i} className="reveal-line">
               <motion.span variants={riseIn} className="block">
                 {line}
                 {i === 1 && (
-                  <span className="font-serif italic text-clay"> people.</span>
+                  <span className="font-serif italic text-clay">{f["accent"]}</span>
                 )}
               </motion.span>
             </span>
@@ -72,8 +73,7 @@ export function HeroSection() {
             variants={fadeUp}
             className="max-w-md text-base leading-relaxed text-muted-foreground"
           >
-            We are an independent studio crafting brands, websites and digital
-            products with an obsession for motion, detail and feeling.
+            {content.description}
           </motion.p>
           <motion.a
             variants={fadeUp}
@@ -83,7 +83,7 @@ export function HeroSection() {
             <span className="flex h-12 w-12 items-center justify-center rounded-full border border-foreground/25">
               <ArrowDown className="h-4 w-4 animate-bounce" />
             </span>
-            Scroll to explore
+            {f["scrollLabel"]}
           </motion.a>
         </motion.div>
       </motion.div>
@@ -96,8 +96,8 @@ export function HeroSection() {
         className="pointer-events-none absolute -right-10 top-1/2 z-0 hidden h-[70vh] w-[34vw] -translate-y-1/2 overflow-hidden rounded-3xl md:block"
       >
         <motion.img
-          src={heroImage}
-          alt="Abstract sculptural studio artwork"
+          src={f["image"]}
+          alt={f["imageAlt"] ?? ""}
           width={1200}
           height={1500}
           style={{ y: imgY, scale: imgScale }}
