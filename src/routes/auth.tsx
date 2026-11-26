@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { LovableMark } from "@lovable.dev/cloud-auth-js/react";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,6 +21,11 @@ function AuthPage() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<"in" | "up" | "reset">("in");
   const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => { if (data.user) navigate({ to: "/admin", replace: true }); });
+    const { data } = supabase.auth.onAuthStateChange((event) => { if (event === "SIGNED_IN") navigate({ to: "/admin", replace: true }); });
+    return () => data.subscription.unsubscribe();
+  }, [navigate]);
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault(); setBusy(true);
     const form = new FormData(e.currentTarget); const email = String(form.get("email")); const password = String(form.get("password") ?? "");
