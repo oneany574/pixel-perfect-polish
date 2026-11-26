@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'bun:test';
+import { describe, test, expect } from 'vitest';
 import { hasAdminRole, safeHref, contentSchema, defaultContent } from './content';
 describe('CMS rules',()=>{
  test('ordinary accounts cannot manage website content',()=>{expect(hasAdminRole(['user'])).toBe(false)});
